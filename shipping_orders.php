@@ -34,6 +34,7 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
                     $toship[$x] = $on_ship_data[$x][0];
                 }
             }
+            // print_r($toship);
             // else
             // {
             //     header("Location: addproducts.php");
@@ -47,16 +48,6 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
 
 }
 
-if($_SERVER['REQUEST_METHOD'] == "POST")
-{
-    $containerId = $_POST['total'];
-    $onShip = 1;
-    $query = "update loading_orders set onShip ='{$onShip}' where containerId = '{$containerId}'";
-
-    mysqli_query($con, $query);
-    header("Location: shipping_orders.php");
-    die;
-}
 
 ?>
 <!doctype html>
@@ -215,10 +206,9 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                     <?php 
                         if($toship[$row] == "0")
                         { ?>
-                        <form method = "post">
-                            <input type="hidden" name="total" id="poster" value="<?php echo $loaded_containers_data[$row][0] ?>"/>
-                            <button type="submit" class="btn btn-danger"> Load into ship   </button>   
-                        </form>
+                            <a href="http://localhost/Container-Scheduling-and-management/shippingorderform.php?cid=<?php echo $loaded_containers_data[$row][0];  ?>">
+                            <button type="button" class="btn btn-danger"> Load into ship   </button>   
+                            </a> 
                         <?php } ?>   
                 </td>
               </tr>
@@ -229,7 +219,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
     </div>
   
       
-   
+    
       <footer class="footer">
         <div class=" text-center bg-light">
           <a href="index.php">
