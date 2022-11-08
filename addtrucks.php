@@ -65,7 +65,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
     //     }
     // }
 
-    $query = "insert into trucks (truckPlate,companyId,harborId,available) values ('{$number_plate}',,'{$trucking_company_id}''{$harborId}','{$available}')";
+    $query = "insert into trucks (truckPlate,companyId,harborId,available) values ('{$number_plate}','{$trucking_company_id}','{$harborId}','{$available}')";
 
     mysqli_query($con, $query);
 
@@ -227,7 +227,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
             <div class="col-6">
                 <div class="card p-2">
                     <div class="card-body"> 
-                        <form action="addship.php" method = "post" enctype="multipart/form-data">  
+                        <form action="addtrucks.php" method = "post">  
                             <div class="mb-4">
                                 <label for="exampleFormControlInput1" class="form-label"> Enter truck number plate number </label>
                                 <input type="text" class="form-control" name = "number_plate" id="number_plate">
@@ -250,10 +250,10 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                             </div>
 
                             <div class="mb-4">
-                                <label for="exampleFormControlInput1" class="form-label">Owner trucking company </label>
+                                <label for="exampleFormControlInput1" class="form-label">Truck at harbor </label>
                                 <div class="dropdown">
                                     <select class="form-select" aria-label="Default select example" onchange="setHarbor()" id="harbor">
-                                        <option selected>Choose shipping company from the list</option>
+                                        <option selected>Choose harbor from the list</option>
                                         <?php for ($row = 0; $row < count($harbors_data); $row++) { ?>
                                             
                                             <option value="<?php echo $harbors_data[$row][0]; ?>" >
@@ -263,6 +263,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                                     </select>
                                 </div>
                             </div>
+
+                           
                         
                             
 
@@ -287,7 +289,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 
         function settruckingId()
         {
-            var subjectIdNode = document.getElementById('harbor');
+            var subjectIdNode = document.getElementById('truck');
             companyId = subjectIdNode.options[subjectIdNode.selectedIndex].value;
 
         }
