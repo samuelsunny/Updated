@@ -30,12 +30,6 @@ session_start();
         $company_address = $_POST['company_address'];
         $contact_number= $_POST['contact_number'];
         $website_link = $_POST['website'];
-        $insurance_fee_percent = $_POST['insurance_fee'];
-        $service_fee_percent = $_POST['service_fee'];
-        $shipping_fee_percent = $_POST['shipping_fee'];
-        $benefitsTableId = 0;
-
-
         $user_id = $user_data['user_id'];
 
         // $real_data = json_decode($_POST['total'],true);
@@ -46,11 +40,7 @@ session_start();
             (!empty($company_address))&& (!empty($website_link))&& (!empty($contact_number)))
         {
             // Saving to data base
-            $query = "insert into freight_forwarding_companies (companyName,email,website,contactPerson,
-                        contactNumber,address,shipping_fee_percentage,insurance_fee_percentage,
-                        service_fee_percentage,benefitsTableId	) values ('$name','$emailId','$website_link',
-                        '$contact_name','$contact_number','$company_address','$shipping_fee_percent','$insurance_fee_percent',
-                        '$service_fee_percent','$benefitsTableId')";
+            $query = "insert into trucking_companies (companyName,email,website,contactPerson,contactNumber,address) values ('$name','$emailId','$website_link','$contact_name','$contact_number','$company_address')";
 
             mysqli_query($con, $query);
 
@@ -59,7 +49,7 @@ session_start();
         }
         else{
             echo '<script>alert("Please enter valid information!")</script>';
-            header("Location: addshippingcompanies.php");
+            header("Location: addtruckingcompanies.php");
             die;
             
         }
@@ -239,26 +229,10 @@ session_start();
 
                                 <input type="text" class="form-control" id = "contact_number" name = "contact_number" placeholder="Enter the contact number">
                             </div>
-                            <div class="mb-4">
-                            <label for="exampleFormControlInput1" class="form-label">Enter the shipping fee percentage</label>
-
-                                <input type="text" class="form-control" id = "shipping_fee" name = "shipping_fee" placeholder="Enter the contact number">
-                            </div>
-                            <div class="mb-4">
-                            <label for="exampleFormControlInput1" class="form-label">Enter the service fee percentage</label>
-
-                                <input type="text" class="form-control" id = "service_fee" name = "service_fee" placeholder="Enter the contact number">
-                            </div>
-                            <div class="mb-4">
-                            <label for="exampleFormControlInput1" class="form-label">Enter the insurance fee percentage</label>
-
-                                <input type="text" class="form-control" id = "insurance_fee" name = "insurance_fee" placeholder="Enter the contact number">
-                            </div>
-                            
                             <div id="sender">
                                 <input type="hidden" name="total" id="poster" value="abc"/>  
 
-                                <button type="submit"  class="btn btn-primary mb-2" id="button">Add warehouse</button>
+                                <button type="submit" onclick = "setJson()" class="btn btn-primary mb-2" id="button">Add warehouse</button>
                             </div>
                         </form>
                     </div>

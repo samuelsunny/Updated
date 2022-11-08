@@ -67,7 +67,7 @@ session_start();
   </head>
   <body>
   <div class="container-fluid">
-    <nav class="navbar navbar-expand-lg bg-light">
+  <nav class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">C S M</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,7 +96,7 @@ session_start();
                         Exporter
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="received_orders.php">Received orders</a></li>
+                        <li><a class="dropdown-item" href="received_loading_orders.php">Received orders</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="manufacturerorder.php">Order inventory</a></li>
                     </ul>
@@ -125,6 +125,20 @@ session_start();
                         <li><a class="dropdown-item" href="addcontainer.php">Add container</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="addmanufacturer.php">Add manufacturer</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addtrucks.php">Add trucks</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addtruckingcompanies.php">Add trucking company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="adddrivers.php">Add driver</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addship.php">Add ships</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addshippingcompanies.php">Add shipping company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="adddrivers.php">Add driver</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="add_FFC.php">Add freight forwarding company</a></li>
                     </ul>
                 </li>
 
@@ -133,7 +147,7 @@ session_start();
                         Orders
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="received_orders.php">Load container</a></li>
+                        <li><a class="dropdown-item" href="received_loading_orders.php">Load container</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="shipping_orders.php">Sea shipping order</a></li>
                         <li><hr class="dropdown-divider"></li>

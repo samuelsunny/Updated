@@ -51,7 +51,7 @@ $user_id = $user_data['user_id'];
                         Exporter
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="received_orders.php">Received orders</a></li>
+                        <li><a class="dropdown-item" href="received_loading_orders.php">Received orders</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="manufacturerorder.php">Order inventory</a></li>
                     </ul>
@@ -80,6 +80,20 @@ $user_id = $user_data['user_id'];
                         <li><a class="dropdown-item" href="addcontainer.php">Add container</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="addmanufacturer.php">Add manufacturer</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addtrucks.php">Add trucks</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addtruckingcompanies.php">Add trucking company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="adddrivers.php">Add driver</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addship.php">Add ships</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addshippingcompanies.php">Add shipping company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="adddrivers.php">Add driver</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="add_FFC.php">Add freight forwarding company</a></li>
                     </ul>
                 </li>
 
@@ -88,7 +102,7 @@ $user_id = $user_data['user_id'];
                         Orders
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="received_orders.php">Load container</a></li>
+                        <li><a class="dropdown-item" href="received_loading_orders.php">Load container</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="shipping_orders.php">Sea shipping order</a></li>
                         <li><hr class="dropdown-divider"></li>

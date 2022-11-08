@@ -76,6 +76,20 @@ $user_data = check_login($con);
                         <li><a class="dropdown-item" href="addcontainer.php">Add container</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="addmanufacturer.php">Add manufacturer</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addtrucks.php">Add trucks</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addtruckingcompanies.php">Add trucking company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="adddrivers.php">Add driver</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addship.php">Add ships</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addshippingcompanies.php">Add shipping company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="adddrivers.php">Add driver</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="add_FFC.php">Add freight forwarding company</a></li>
                     </ul>
                 </li>
 

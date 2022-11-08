@@ -88,6 +88,36 @@ session_start();
                                             Importer Account
                                         </label>
                                     </div>
+                                    <div class="col-4">
+                                        <input class="form-check-input" id = "importer" type="checkbox"  name="account_type" onclick="setimport()" value="Importer">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            FFC Account
+                                        </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <input class="form-check-input" id = "importer" type="checkbox"  name="account_type" onclick="setimport()" value="Importer">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Sales Account
+                                        </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <input class="form-check-input" id = "importer" type="checkbox"  name="account_type" onclick="setimport()" value="Importer">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Dispatcher Account
+                                        </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <input class="form-check-input" id = "importer" type="checkbox"  name="account_type" onclick="setimport()" value="Importer">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Accounting Account
+                                        </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <input class="form-check-input" id = "importer" type="checkbox"  name="account_type" onclick="setimport()" value="Importer">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Staff Account
+                                        </label>
+                                    </div>
                                 </div>
                                                             
                             </div>

@@ -7,17 +7,16 @@ $user_data = check_login($con);
 $user_id = $user_data['user_id'];
 
 
-$get_harbors = "select harborId,harborName from harbors";
+$get_shipping_companies = "select * from shipping_companies";
 
-$result = mysqli_query($con, $get_harbors);
-// print_r( $result);
+$result = mysqli_query($con, $get_shipping_companies);
 
 if($result)
 {
     if($result && mysqli_num_rows($result) > 0)
     {
-        $harbors_data = mysqli_fetch_all($result);
-        // print_r($harbors_data);
+        $shipping_companies_data = mysqli_fetch_all($result);
+        // print_r($shipping_companies_data);
     }
 }
 
@@ -42,36 +41,16 @@ echo "problem in getting data";
 
 if($_SERVER['REQUEST_METHOD'] == "POST")
 {
-    print_r($_POST);
-    $real_data = json_decode($_POST['total'],true);
-    $code = $_POST['ISO6346_code'];
-    $sourceHarborId = $real_data['harborId'];
-    $destinationHarborId = "0000";
-    $capacity = 0;
+    // print_r($_POST);
+    $driver_name = $_POST['driver_name'];
+    $driver_contact = $_POST['contact_number'];
+    $available = "Yes";
 
-    // echo $code;
-
-    if(!empty($_FILES["image_file"]["name"])) { 
-        echo "Inside image code!";
-        // Get file info 
-        $fileName = basename($_FILES["image_file"]["name"]); 
-        $fileType = pathinfo($fileName, PATHINFO_EXTENSION); 
-         
-        // Allow certain file formats 
-        $allowTypes = array('jpg','png','jpeg','gif'); 
-        if(in_array($fileType, $allowTypes)){ 
-            echo "In!";
-            $image = $_FILES['image_file']['tmp_name']; 
-
-            $imgContent = addslashes(file_get_contents($image)); 
-        }
-    }
-
-    $query = "insert into containers (ISO6346_Code,containerImage,sourceHarborId,destinationHarborId,capacity) values ('{$code}','{$imgContent}','{$sourceHarborId}','{$destinationHarborId}','{$full}')";
+    $query = "insert into drivers (driverName,contactNumber,available) values ('{$driver_name}','{$driver_contact}','{$available}')";
 
     mysqli_query($con, $query);
 
-    header("Location: addcontainer.php");
+    header("Location: successfully_added.php");
     die;
     // When the user clicks on the create account button
     // $harborName = $_POST['harbourName'];
@@ -219,42 +198,22 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 </div>
     <div class="container mt-5">
         <div class="row justify-content-center mt-5">
-            <div class="col-6">
-                <img src="containers.jpeg" class="img-fluid" alt="Responsive image">
-                
-                    <ul>
-                        <li><p class="mt-4"> Fill the details to add a harbour stock room</p> </li>
-                    </ul>
-            </div>
+            
             <div class="col-6">
                 <div class="card p-2">
                     <div class="card-body"> 
-                        <form action="addcontainer.php" method = "post" enctype="multipart/form-data">  
+                        <form action="addship.php" method = "post" enctype="multipart/form-data">  
                             <div class="mb-4">
-                                <label for="exampleFormControlInput1" class="form-label">ISO6346 code of container </label>
-                                <input type="text" class="form-control" name = "ISO6346_code" id="ISO6346_code">
+                                <label for="exampleFormControlInput1" class="form-label"> Enter driver name </label>
+                                <input type="text" class="form-control" name = "driver_name" id="driver_name">
                             </div>
 
                             <div class="mb-4">
-                                <label for="exampleFormControlInput1" class="form-label">Assign to harbor: </label>
-                                <div class="dropdown">
-                                    <select class="form-select" aria-label="Default select example" onchange="setHarbor()" id="harbor">
-                                        <option selected>Choose harbor from the list</option>
-                                        <?php for ($row = 0; $row < count($harbors_data); $row++) { ?>
-                                            
-                                            <option value="<?php echo $harbors_data[$row][0]; ?>" >
-                                                <?php echo $harbors_data[$row][1]; ?>
-                                            </option>
-                                        <?php }?>
-                                    </select>
-                                </div>
+                                <label for="exampleFormControlInput1" class="form-label"> Enter driver contact number </label>
+                                <input type="text" class="form-control" name = "contact_number" id="contact_number">
                             </div>
                         
-                            <div class="mb-4">
-                                <label for="formFile" class="form-label">Choose the container image file</label>
-                                <input class="form-control" type="file" id="formFile" name="image_file">
-                            </div>
-
+                
                             
                          
                             <input type="hidden" name="total" id="poster" value="abc"/>  
@@ -291,7 +250,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
         {
             var poster =  document.getElementById("poster");
             var order_data = {
-                    "harborId": parseInt(harborId)
+                    "shipping_comapny_id": parseInt(harborId)
                     }
             json_data = JSON.stringify(order_data);
             poster.value = json_data;

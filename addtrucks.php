@@ -7,7 +7,20 @@ $user_data = check_login($con);
 $user_id = $user_data['user_id'];
 
 
-$get_harbors = "select harborId,harborName from harbors";
+$get_trucking_companies = "select * from trucking_companies";
+
+$result = mysqli_query($con, $get_trucking_companies);
+
+if($result)
+{
+    if($result && mysqli_num_rows($result) > 0)
+    {
+        $trucking_companies_data = mysqli_fetch_all($result);
+        // print_r($shipping_companies_data);
+    }
+}
+
+$get_harbors = "select * from harbors";
 
 $result = mysqli_query($con, $get_harbors);
 // print_r( $result);
@@ -17,20 +30,6 @@ if($result)
     if($result && mysqli_num_rows($result) > 0)
     {
         $harbors_data = mysqli_fetch_all($result);
-        // print_r($harbors_data);
-    }
-}
-
-$get_exporters = "select user_id,user_name from users where account_type = 'Exporter'";
-
-$result = mysqli_query($con, $get_exporters);
-// print_r( $result);
-
-if($result)
-{
-    if($result && mysqli_num_rows($result) > 0)
-    {
-        $exporters_data = mysqli_fetch_all($result);
         // print_r($products_data);
     }
 }
@@ -42,36 +41,35 @@ echo "problem in getting data";
 
 if($_SERVER['REQUEST_METHOD'] == "POST")
 {
-    print_r($_POST);
+    // print_r($_POST);
     $real_data = json_decode($_POST['total'],true);
-    $code = $_POST['ISO6346_code'];
-    $sourceHarborId = $real_data['harborId'];
-    $destinationHarborId = "0000";
-    $capacity = 0;
-
+    $number_plate = $_POST['number_plate'];
+    $trucking_company_id = $real_data['trucking_company_id'];
+    $harborId = $real_data['harborId'];
+    $available = "Yes";
     // echo $code;
 
-    if(!empty($_FILES["image_file"]["name"])) { 
-        echo "Inside image code!";
-        // Get file info 
-        $fileName = basename($_FILES["image_file"]["name"]); 
-        $fileType = pathinfo($fileName, PATHINFO_EXTENSION); 
+    // if(!empty($_FILES["image_file"]["name"])) { 
+    //     echo "Inside image code!";
+    //     // Get file info 
+    //     $fileName = basename($_FILES["image_file"]["name"]); 
+    //     $fileType = pathinfo($fileName, PATHINFO_EXTENSION); 
          
-        // Allow certain file formats 
-        $allowTypes = array('jpg','png','jpeg','gif'); 
-        if(in_array($fileType, $allowTypes)){ 
-            echo "In!";
-            $image = $_FILES['image_file']['tmp_name']; 
+    //     // Allow certain file formats 
+    //     $allowTypes = array('jpg','png','jpeg','gif'); 
+    //     if(in_array($fileType, $allowTypes)){ 
+    //         echo "In!";
+    //         $image = $_FILES['image_file']['tmp_name']; 
 
-            $imgContent = addslashes(file_get_contents($image)); 
-        }
-    }
+    //         $imgContent = addslashes(file_get_contents($image)); 
+    //     }
+    // }
 
-    $query = "insert into containers (ISO6346_Code,containerImage,sourceHarborId,destinationHarborId,capacity) values ('{$code}','{$imgContent}','{$sourceHarborId}','{$destinationHarborId}','{$full}')";
+    $query = "insert into trucks (truckPlate,companyId,harborId,available) values ('{$number_plate}',,'{$trucking_company_id}''{$harborId}','{$available}')";
 
     mysqli_query($con, $query);
 
-    header("Location: addcontainer.php");
+    header("Location: successfully_added.php");
     die;
     // When the user clicks on the create account button
     // $harborName = $_POST['harbourName'];
@@ -220,26 +218,42 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
     <div class="container mt-5">
         <div class="row justify-content-center mt-5">
             <div class="col-6">
-                <img src="containers.jpeg" class="img-fluid" alt="Responsive image">
+                <img src="ship.jpg" class="img-fluid" alt="Responsive image">
                 
                     <ul>
-                        <li><p class="mt-4"> Fill the details to add a harbour stock room</p> </li>
+                        <li><p class="mt-4"> Fill the details to add a ship</p> </li>
                     </ul>
             </div>
             <div class="col-6">
                 <div class="card p-2">
                     <div class="card-body"> 
-                        <form action="addcontainer.php" method = "post" enctype="multipart/form-data">  
+                        <form action="addship.php" method = "post" enctype="multipart/form-data">  
                             <div class="mb-4">
-                                <label for="exampleFormControlInput1" class="form-label">ISO6346 code of container </label>
-                                <input type="text" class="form-control" name = "ISO6346_code" id="ISO6346_code">
+                                <label for="exampleFormControlInput1" class="form-label"> Enter truck number plate number </label>
+                                <input type="text" class="form-control" name = "number_plate" id="number_plate">
+                            </div>
+
+
+                            <div class="mb-4">
+                                <label for="exampleFormControlInput1" class="form-label">Owner trucking company </label>
+                                <div class="dropdown">
+                                    <select class="form-select" aria-label="Default select example" onchange="settruckingId()" id="truck">
+                                        <option selected>Choose shipping company from the list</option>
+                                        <?php for ($row = 0; $row < count($trucking_companies_data); $row++) { ?>
+                                            
+                                            <option value="<?php echo $trucking_companies_data[$row][0]; ?>" >
+                                                <?php echo $trucking_companies_data[$row][1]; ?>
+                                            </option>
+                                        <?php }?>
+                                    </select>
+                                </div>
                             </div>
 
                             <div class="mb-4">
-                                <label for="exampleFormControlInput1" class="form-label">Assign to harbor: </label>
+                                <label for="exampleFormControlInput1" class="form-label">Owner trucking company </label>
                                 <div class="dropdown">
                                     <select class="form-select" aria-label="Default select example" onchange="setHarbor()" id="harbor">
-                                        <option selected>Choose harbor from the list</option>
+                                        <option selected>Choose shipping company from the list</option>
                                         <?php for ($row = 0; $row < count($harbors_data); $row++) { ?>
                                             
                                             <option value="<?php echo $harbors_data[$row][0]; ?>" >
@@ -250,10 +264,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                                 </div>
                             </div>
                         
-                            <div class="mb-4">
-                                <label for="formFile" class="form-label">Choose the container image file</label>
-                                <input class="form-control" type="file" id="formFile" name="image_file">
-                            </div>
+                            
 
                             
                          
@@ -272,12 +283,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
     <script>
         var harborId = 0;
         var container_ISO_code = document.getElementById('ISO6346_code').value;
-        var productId = 0;
+        var companyId = 0;
 
-        function setcode()
+        function settruckingId()
         {
-            container_ISO_code = document.getElementById('code').value;
-            console.log("The selected name=" + container_ISO_code);
+            var subjectIdNode = document.getElementById('harbor');
+            companyId = subjectIdNode.options[subjectIdNode.selectedIndex].value;
 
         }
         function setHarbor()
@@ -291,7 +302,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
         {
             var poster =  document.getElementById("poster");
             var order_data = {
-                    "harborId": parseInt(harborId)
+                    "trucking_company_id": parseInt(companyId),
+                    "harborId"           : parseInt(harborId)
                     }
             json_data = JSON.stringify(order_data);
             poster.value = json_data;

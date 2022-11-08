@@ -3,103 +3,100 @@ session_start();
 
 include("connection.php");
 include("functions.php");
+
 $user_data = check_login($con);
 $user_id = $user_data['user_id'];
 
+$get_ships = "select * from ships";
 
-$get_harbors = "select harborId,harborName from harbors";
-
-$result = mysqli_query($con, $get_harbors);
+$result = mysqli_query($con, $get_ships);
 // print_r( $result);
 
 if($result)
 {
     if($result && mysqli_num_rows($result) > 0)
     {
-        $harbors_data = mysqli_fetch_all($result);
+        $ships_data = mysqli_fetch_all($result);
         // print_r($harbors_data);
     }
 }
 
-$get_exporters = "select user_id,user_name from users where account_type = 'Exporter'";
-
-$result = mysqli_query($con, $get_exporters);
-// print_r( $result);
-
-if($result)
+if($_SERVER['REQUEST_METHOD'] == "GET")
 {
-    if($result && mysqli_num_rows($result) > 0)
-    {
-        $exporters_data = mysqli_fetch_all($result);
-        // print_r($products_data);
+    // When the user clicks on the create account button
+   
+    
+        $check_onship = 1;
+        // Reading from the data base
+        $query = "select distinct containerId from loading_orders where onShip = '{$check_onship}'";
+
+        $result = mysqli_query($con, $query);
+
+        if($result)
+        {
+            if($result && mysqli_num_rows($result) > 0)
+            {
+                $onship_data = mysqli_fetch_all($result);
+                // echo "loading_orders:";
+                // print_r($loaded_containers_data);
+                $ships = array();
+                for ($x = 0; $x < count($onship_data); $x++) {
+
+                    $query = "select distinct shipId from shipping_order where containerId = '{$onship_data[$x][0]}'";
+                    $result = mysqli_query($con, $query); 
+                    if($result && mysqli_num_rows($result) > 0)
+                    {
+                        $shipIds = mysqli_fetch_all($result);
+                        for ($y = 0; $y < count($onship_data); $y++) {
+
+                            $query = "select * from shipping_order where shipId = '{$shipIds[$y][0]}'";
+                            $result = mysqli_query($con, $query); 
+                            if($result && mysqli_num_rows($result) > 0)
+                            {
+                                $data = mysqli_fetch_all($result);
+                            }
+                        }
+                    }
+                    // print_r($shipIds);
+                    // echo "\n";
+                    // print_r($data);
+                }
+            }
+            // print_r($toship);
+            // else
+            // {
+            //     header("Location: addproducts.php");
+            //     die;
+            // }
+        }
+    
+    else{
+        echo "problem in getting data";
     }
+
 }
-
-else{
-echo "problem in getting data";
-}
-
-
 if($_SERVER['REQUEST_METHOD'] == "POST")
 {
-    print_r($_POST);
-    $real_data = json_decode($_POST['total'],true);
-    $code = $_POST['ISO6346_code'];
-    $sourceHarborId = $real_data['harborId'];
-    $destinationHarborId = "0000";
-    $capacity = 0;
+    $containerId = $_POST['total'];
+    $arrived = "Yes";
+    $update_shipping_order = "update shipping_order set arrived = '{$arrived}' where containerId = '{$containerId}'";
+    $result = mysqli_query($con, $update_shipping_order);
 
-    // echo $code;
-
-    if(!empty($_FILES["image_file"]["name"])) { 
-        echo "Inside image code!";
-        // Get file info 
-        $fileName = basename($_FILES["image_file"]["name"]); 
-        $fileType = pathinfo($fileName, PATHINFO_EXTENSION); 
-         
-        // Allow certain file formats 
-        $allowTypes = array('jpg','png','jpeg','gif'); 
-        if(in_array($fileType, $allowTypes)){ 
-            echo "In!";
-            $image = $_FILES['image_file']['tmp_name']; 
-
-            $imgContent = addslashes(file_get_contents($image)); 
-        }
-    }
-
-    $query = "insert into containers (ISO6346_Code,containerImage,sourceHarborId,destinationHarborId,capacity) values ('{$code}','{$imgContent}','{$sourceHarborId}','{$destinationHarborId}','{$full}')";
-
-    mysqli_query($con, $query);
-
-    header("Location: addcontainer.php");
+    $get_container = "select * from containers where containerId = '{$containerId}'";
+    $result = mysqli_query($con, $get_container);
+    $container_data = mysqli_fetch_all($result); 
+    $source = $container_data[0][3];
+    $destination = "0000";
+    // echo "SD:",$source,$destination;
+    $update_source = "update containers set sourceHarborId = '{$source}',destinationHarborId = '{$destination}' where containerId = '{$containerId}'";
+    $result = mysqli_query($con, $update_source);
+    // print_r( $result);
+    header("Location: index.php");
     die;
-    // When the user clicks on the create account button
-    // $harborName = $_POST['harbourName'];
-    // $country  = $_POST['country'];
-    // $address = $_POST['address'];
-    // $telephone = $_POST['telephone'];
-
-    // if((!empty($harborName)) && (!empty($country)) && (!empty($address))&&
-    //         (!empty($telephone)))
-    //     {
-
-    //         // Saving to data base
-    //         $query = "insert into harbors (harborName,country,address,telephone) values ('$harborName','$country','$address','$telephone')";
-
-    //         mysqli_query($con, $query);
-    //         // echo '<script>alert("Please enter valid information!")</script>';
-
-    //         header("Location: addharbour.php");
-    //         die;
-    //     }
-    //     else{
-    //         echo '<script>alert("Please enter valid information!")</script>';
-            
-    //     }
 
 }
-?>
 
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -109,8 +106,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
   </head>
   <body>
-  <div class="container-fluid">
-  <nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">C S M</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
@@ -217,88 +214,56 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
         </div>
     </nav>
 </div>
-    <div class="container mt-5">
-        <div class="row justify-content-center mt-5">
-            <div class="col-6">
-                <img src="containers.jpeg" class="img-fluid" alt="Responsive image">
-                
-                    <ul>
-                        <li><p class="mt-4"> Fill the details to add a harbour stock room</p> </li>
-                    </ul>
-            </div>
-            <div class="col-6">
-                <div class="card p-2">
-                    <div class="card-body"> 
-                        <form action="addcontainer.php" method = "post" enctype="multipart/form-data">  
-                            <div class="mb-4">
-                                <label for="exampleFormControlInput1" class="form-label">ISO6346 code of container </label>
-                                <input type="text" class="form-control" name = "ISO6346_code" id="ISO6346_code">
-                            </div>
-
-                            <div class="mb-4">
-                                <label for="exampleFormControlInput1" class="form-label">Assign to harbor: </label>
-                                <div class="dropdown">
-                                    <select class="form-select" aria-label="Default select example" onchange="setHarbor()" id="harbor">
-                                        <option selected>Choose harbor from the list</option>
-                                        <?php for ($row = 0; $row < count($harbors_data); $row++) { ?>
-                                            
-                                            <option value="<?php echo $harbors_data[$row][0]; ?>" >
-                                                <?php echo $harbors_data[$row][1]; ?>
-                                            </option>
-                                        <?php }?>
-                                    </select>
-                                </div>
-                            </div>
-                        
-                            <div class="mb-4">
-                                <label for="formFile" class="form-label">Choose the container image file</label>
-                                <input class="form-control" type="file" id="formFile" name="image_file">
-                            </div>
-
-                            
-                         
-                            <input type="hidden" name="total" id="poster" value="abc"/>  
-                           
-                            <button type="submit" class="btn btn-primary" onclick="setJson()">Add container</button>
-                        </form>
-                    </div>
-
-                  </div>
-            </div>
+      
+    <div class="row justify-content-center mt-2">
+        <div class="col-6">
+            <h1 class="display-4 fs-2 text-center"><b>Ships arrival</b></h1>
         </div>
-        
     </div>
+    
+    <div class="container">
+      <div class="row mt-4">
 
-    <script>
-        var harborId = 0;
-        var container_ISO_code = document.getElementById('ISO6346_code').value;
-        var productId = 0;
-
-        function setcode()
-        {
-            container_ISO_code = document.getElementById('code').value;
-            console.log("The selected name=" + container_ISO_code);
-
-        }
-        function setHarbor()
-        {
-            var subjectIdNode = document.getElementById('harbor');
-            harborId = subjectIdNode.options[subjectIdNode.selectedIndex].value;
-            console.log("The selected name=" + harborId);
-
-        }
-        function setJson()
-        {
-            var poster =  document.getElementById("poster");
-            var order_data = {
-                    "harborId": parseInt(harborId)
-                    }
-            json_data = JSON.stringify(order_data);
-            poster.value = json_data;
-
-
-        }
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+      <table class="table">
+            <thead>
+                <tr>
+                <th class="text-center" scope="col">Ship Id</th>
+                <th class="text-center" scope="col">Source Harbor Id</th>
+                <th class="text-center" scope="col">Destination Harbor Id</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php for ($row = 0; $row < count($data); $row++) {?>
+              <tr>
+                <th class="text-center" scope="row"><?php echo $data[$row][5] ?></th>
+                <td class="text-center"><?php echo $data[$row][2] ?></td>
+                <td class="text-center"><?php echo $data[$row][3] ?></td>
+                <td>
+                    <form action= "shiparrived.php" method = "post">
+                        <input type="hidden" name="total" id="poster" value="<?php echo $data[$row][1] ?>"/>
+                        <button type="submit" class="btn btn-success">
+                        <?php echo "Arrived" ?>
+                        </button>
+                    </form>
+                </td>    
+              </tr>
+              <?php } ?>
+            </tbody>
+          </table>     
+      </div>
+    </div>
+  
+      
+    
+      <footer class="footer">
+        <div class=" text-center bg-light">
+          <a href="index.php">
+              <button class="btn btn-success  m-2" type="button">Back</button>
+          </a>
+        </div>
+      </footer>
+      
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
   </body>
 </html>
+
