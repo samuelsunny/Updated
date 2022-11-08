@@ -232,7 +232,7 @@ session_start();
                             <div id="sender">
                                 <input type="hidden" name="total" id="poster" value="abc"/>  
 
-                                <button type="submit" onclick = "setJson()" class="btn btn-primary mb-2" id="button">Add warehouse</button>
+                                <button type="submit" onclick = "setJson()" class="btn btn-primary mb-2" id="button">Add trucking company</button>
                             </div>
                         </form>
                     </div>
